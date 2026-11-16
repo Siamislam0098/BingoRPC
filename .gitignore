@@ -1,0 +1,15 @@
+# Node dependencies
+node_modules/
+package-lock.json
+
+# Compiled executables
+native-host/host.exe
+*.exe
+
+# Logs
+*.log
+native-host/host.log
+
+# OS generated files
+.DS_Store
+Thumbs.db

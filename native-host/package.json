@@ -1,0 +1,13 @@
+{
+  "name": "bingorpc-native-host",
+  "version": "0.1.0",
+  "description": "Native helper that sets the Discord status for BingoRPC",
+  "main": "host.js",
+  "private": true,
+  "scripts": {
+    "start": "node host.js"
+  },
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.3.0"
+  }
+}
