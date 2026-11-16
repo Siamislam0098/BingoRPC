@@ -1,0 +1,76 @@
+name: Release
+
+# Runs when you push a tag like v0.3.0 (or when you click "Run workflow").
+# It builds the Windows helper installer and the extension zips, and attaches them to a GitHub Release.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run tests
+        run: |
+          node tests/lib.test.js
+          node tests/image-check.test.js
+
+      - name: Write helper config (Discord Application ID)
+        shell: bash
+        env:
+          CLIENT_ID: ${{ vars.DISCORD_CLIENT_ID }}
+        run: |
+          if [ -z "$CLIENT_ID" ]; then echo "Missing repo variable DISCORD_CLIENT_ID (Settings > Secrets and variables > Actions > Variables)"; exit 1; fi
+          mkdir -p native-host/dist
+          node -e "require('fs').writeFileSync('native-host/dist/config.json', JSON.stringify({clientId: process.env.CLIENT_ID, defaultImage: 'default', activityType: 3}, null, 2))"
+
+      - name: Build helper .exe
+        working-directory: native-host
+        run: |
+          npm install
+          node build-exe.js
+
+      - name: Build installer
+        shell: bash
+        run: |
+          TAG="${GITHUB_REF_NAME:-0.0.0}"
+          export BINGORPC_VERSION="${TAG#v}"
+          choco install innosetup -y --no-progress
+          "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" installer/BingoRPC.iss
+
+      - name: Pack extension
+        shell: bash
+        run: |
+          node scripts/pack-extension.js
+          cd dist/extension-store && 7z a -tzip ../../BingoRPC-extension-store.zip . && cd ../..
+          cd dist/extension-sideload && 7z a -tzip ../../BingoRPC-extension-sideload.zip . && cd ../..
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --title "BingoRPC $GITHUB_REF_NAME" --generate-notes \
+            native-host/dist/BingoRPC-Helper-Setup.exe \
+            BingoRPC-extension-store.zip BingoRPC-extension-sideload.zip
+
+      - name: Keep files from manual runs
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: bingorpc-build
+          path: |
+            native-host/dist/BingoRPC-Helper-Setup.exe
+            BingoRPC-extension-store.zip
+            BingoRPC-extension-sideload.zip

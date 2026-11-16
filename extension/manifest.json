@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "BingoRPC",
+  "version": "0.3.0",
+  "description": "Shows what you are watching on streaming sites as your Discord status.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsy9hgWZX7KiXefwJ/ad/kk/zy9kvdO+TwIH+GgsDFPU79zLUz18se2sdsIJNh5TGB3+rSmnwfjfCtaltnWSwD0OGswpX277n2hyZBFVPimiFcGjLG1s+a7cTlm56oHrqOZ5Xx23ItI1+tXA7yHmc2wfnWqqk/gE9JMvSggx1+ckrHj3n6+1pFg4BUv0dGmYr3BKrnHZfdFZTeiwXGFMN3gOK0xi9KJdYDe/hQUKz5Yoimtmja+tFqXH7Ajja6L+AYLXwsArCNYQpmGzoX4jlCxZbHvmW/A7U8TrJpTnb+PRfvtd7QMi/vjJBkuC5xi56Ln0EPBnuU8DpWGWRFnuT1wIDAQAB",
+  "icons": {
+    "16": "icons/icon.png",
+    "48": "icons/icon.png",
+    "128": "icons/icon.png"
+  },
+  "permissions": [
+    "nativeMessaging",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "optional_host_permissions": [
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "BingoRPC"
+  }
+}

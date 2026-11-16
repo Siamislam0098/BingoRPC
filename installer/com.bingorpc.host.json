@@ -1,0 +1,9 @@
+{
+  "name": "com.bingorpc.host",
+  "description": "BingoRPC helper that sets the Discord status",
+  "path": "BingoRPC-host.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://hpnbmdkchlknkobmloldgfedldljjdgc/"
+  ]
+}
