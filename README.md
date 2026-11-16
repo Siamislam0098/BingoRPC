@@ -32,9 +32,3 @@ No site is built in.
    look under **Player domains found on this page** and click **Allow** next to the one marked "likely player".
 4. You can also type a site in the **Add a site** box (`crunchyroll.com`, or paste any link from it).
 5. The **Sites** list shows everything you added. The checkbox turns a site on or off. **Remove** takes the permission back.
-`config.json` (set `"activityType": 3`), run `install-host.bat`, restart the browser,
-load `extension/` with Load unpacked.
-
-## Licence
-
-Not chosen yet. Pick one before you publish (MIT is the simple choice) and add a `LICENSE` file.
